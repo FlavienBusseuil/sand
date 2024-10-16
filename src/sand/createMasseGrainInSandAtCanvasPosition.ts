@@ -16,8 +16,8 @@ export function addMasseGrainToSandAtCanvasPosition(
 	{ size = 5, grainColor = defaultGrainColor }: Options = {}
 ) {
 	const centralGridPosition = canvasToGridSpace(position, sand.grid);
-	for (let x = size; x >= -size; x = x - 2) {
-		for (let y = size; y >= -size; y = y - 2) {
+	for (let x = size; x >= -size; x = x - 1) {
+		for (let y = size; y >= -size; y = y - 1) {
 			createGrainInSandAt(
 				{ x: centralGridPosition.x + x, y: centralGridPosition.y + y },
 				sand,
