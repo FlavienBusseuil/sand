@@ -5,7 +5,7 @@ type ClientPosition = {
 
 export function addEventListenerHoldMouseDown(
 	callback: (mousePosition: ClientPosition) => void,
-	ratePerSecond: number = 2
+	ratePerSecond: number = 15
 ) {
 	let intervalId: null | number = null;
 	const mousePosition: ClientPosition = { x: 0, y: 0 };
