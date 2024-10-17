@@ -9,14 +9,16 @@ import { hslColor } from "../color/hslColor";
 import { createParticlesInCircleAt } from "../brush/createParticlesInCircleAt";
 import { createGrainInSandAt } from "../sand/createGrainAt";
 import { canvasToGridSpace } from "../grid/position/toGridSpace";
-
-let i = 0;
+import { addEventListenerMouseScroll } from "../mouse/addEventListenerMouseScroll";
 
 function cleanUpForHRM() {
 	[...document.body.children].forEach((child) => child.remove());
 }
 
 export async function init() {
+	let hueDegree = 0;
+	let brushSize = 5;
+
 	cleanUpForHRM();
 	const grid = await createGrid(500, 500, {
 		sizeCell: 1,
@@ -29,6 +31,11 @@ export async function init() {
 		updateGfxForSand(sand);
 	});
 
+	addEventListenerMouseScroll((scrollDelta) => {
+		brushSize += Math.trunc(scrollDelta * -0.01);
+		brushSize = Math.min(Math.max(1, brushSize), 20);
+	});
+
 	addEventListenerHoldMouseDown(({ x, y }) => {
 		const mousePositionInCanvas: CanvasPosition = {
 			x: x - grid.gfx.canvas.canvas.offsetTop,
@@ -36,11 +43,11 @@ export async function init() {
 		};
 		const mousePositionInGrid = canvasToGridSpace(mousePositionInCanvas, grid);
 
-		i = (i + 1) % 360;
+		hueDegree = (hueDegree + 1) % 360;
 
-		createParticlesInCircleAt(mousePositionInGrid, 10, (position) =>
+		createParticlesInCircleAt(mousePositionInGrid, brushSize, (position) =>
 			createGrainInSandAt(position, sand, {
-				grainColor: hslColor(i),
+				grainColor: hslColor(hueDegree),
 			})
 		);
 	});
